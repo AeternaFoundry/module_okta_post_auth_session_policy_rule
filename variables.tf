@@ -23,5 +23,13 @@ EOT
     users_excluded    = optional(set(string))
     workflow_id       = optional(string)
   }))
+  validation {
+    condition = alltrue([
+      for k, v in var.post_auth_session_policy_rules : (
+        v.status == null || (contains(["ACTIVE", "INACTIVE"], v.status))
+      )
+    ])
+    error_message = "must be one of: \"ACTIVE\", \"INACTIVE\""
+  }
 }
 
